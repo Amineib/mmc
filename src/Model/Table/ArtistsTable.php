@@ -9,7 +9,7 @@ use Cake\Validation\Validator;
 /**
  * Artists Model
  *
- * @property \Cake\ORM\Association\BelongsTo $Bands
+ * @property \Cake\ORM\Association\BelongsToMany $Bands
  *
  * @method \App\Model\Entity\Artist get($primaryKey, $options = [])
  * @method \App\Model\Entity\Artist newEntity($data = null, array $options = [])
@@ -40,8 +40,10 @@ class ArtistsTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Bands', [
-            'foreignKey' => 'band_id'
+        $this->belongsToMany('Bands', [
+            'foreignKey' => 'artist_id',
+            'targetForeignKey' => 'band_id',
+            'joinTable' => 'artists_bands'
         ]);
     }
 
@@ -61,22 +63,14 @@ class ArtistsTable extends Table
             ->allowEmpty('name');
 
         $validator
-            ->allowEmpty('instruments');
+            ->allowEmpty('profile');
+
+        $validator
+            ->allowEmpty('picture');
+
+        $validator
+            ->allowEmpty('description');
 
         return $validator;
-    }
-
-    /**
-     * Returns a rules checker object that will be used for validating
-     * application integrity.
-     *
-     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
-     * @return \Cake\ORM\RulesChecker
-     */
-    public function buildRules(RulesChecker $rules)
-    {
-        $rules->add($rules->existsIn(['band_id'], 'Bands'));
-
-        return $rules;
     }
 }

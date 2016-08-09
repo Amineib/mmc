@@ -25,6 +25,7 @@ class BandsFixture extends TestFixture
         'city_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'created' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
         'modified' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
+        'picture' => ['type' => 'string', 'length' => 70, 'null' => true, 'default' => null, 'collate' => 'latin1_swedish_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
         ],
@@ -48,8 +49,9 @@ class BandsFixture extends TestFixture
             'formed' => 'Lorem ipsum dolor sit amet, aliquet feugiat. Convallis morbi fringilla gravida, phasellus feugiat dapibus velit nunc, pulvinar eget sollicitudin venenatis cum nullam, vivamus ut a sed, mollitia lectus. Nulla vestibulum massa neque ut et, id hendrerit sit, feugiat in taciti enim proin nibh, tempor dignissim, rhoncus duis vestibulum nunc mattis convallis.',
             'description' => 'Lorem ipsum dolor sit amet',
             'city_id' => 1,
-            'created' => '2016-08-06 19:05:26',
-            'modified' => '2016-08-06 19:05:26'
+            'created' => '2016-08-09 09:05:44',
+            'modified' => '2016-08-09 09:05:44',
+            'picture' => 'Lorem ipsum dolor sit amet'
         ],
     ];
 }

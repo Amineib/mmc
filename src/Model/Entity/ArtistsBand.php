@@ -4,16 +4,18 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Single Entity
+ * ArtistsBand Entity
  *
- * @property int $id
- * @property string $name
- * @property string $link
+ * @property int $artist_id
  * @property int $band_id
+ * @property string $instrument
+ * @property string $joined
+ * @property \Cake\I18n\Time $left
  *
+ * @property \App\Model\Entity\Artist $artist
  * @property \App\Model\Entity\Band $band
  */
-class Single extends Entity
+class ArtistsBand extends Entity
 {
 
     /**
@@ -27,6 +29,7 @@ class Single extends Entity
      */
     protected $_accessible = [
         '*' => true,
-        'id' => false
+        'band_id' => false,
+        'artist_id' => false
     ];
 }

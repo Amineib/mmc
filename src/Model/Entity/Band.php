@@ -14,6 +14,7 @@ use Cake\ORM\Entity;
  * @property int $city_id
  * @property \Cake\I18n\Time $created
  * @property \Cake\I18n\Time $modified
+ * @property string $picture
  *
  * @property \App\Model\Entity\City $city
  * @property \App\Model\Entity\Album[] $albums

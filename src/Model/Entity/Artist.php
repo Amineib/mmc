@@ -8,10 +8,11 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property string $name
- * @property string $instruments
- * @property int $band_id
  * @property string $created
  * @property string $modified
+ * @property string $profile
+ * @property string $picture
+ * @property string $description
  *
  * @property \App\Model\Entity\Band $band
  */

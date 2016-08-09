@@ -11,9 +11,8 @@ use Cake\Validation\Validator;
  *
  * @property \Cake\ORM\Association\BelongsTo $Cities
  * @property \Cake\ORM\Association\HasMany $Albums
- * @property \Cake\ORM\Association\HasMany $Artists
  * @property \Cake\ORM\Association\HasMany $Networks
- * @property \Cake\ORM\Association\HasMany $Singles
+ * @property \Cake\ORM\Association\BelongsToMany $Artists
  * @property \Cake\ORM\Association\BelongsToMany $Genres
  *
  * @method \App\Model\Entity\Band get($primaryKey, $options = [])
@@ -51,14 +50,13 @@ class BandsTable extends Table
         $this->hasMany('Albums', [
             'foreignKey' => 'band_id'
         ]);
-        $this->hasMany('Artists', [
-            'foreignKey' => 'band_id'
-        ]);
         $this->hasMany('Networks', [
             'foreignKey' => 'band_id'
         ]);
-        $this->hasMany('Singles', [
-            'foreignKey' => 'band_id'
+        $this->belongsToMany('Artists', [
+            'foreignKey' => 'band_id',
+            'targetForeignKey' => 'artist_id',
+            'joinTable' => 'artists_bands'
         ]);
         $this->belongsToMany('Genres', [
             'foreignKey' => 'band_id',
@@ -92,6 +90,9 @@ class BandsTable extends Table
         $validator
             ->allowEmpty('description');
 
+        $validator
+            ->allowEmpty('picture');
+
         return $validator;
     }
 
@@ -107,32 +108,5 @@ class BandsTable extends Table
         $rules->add($rules->existsIn(['city_id'], 'Cities'));
 
         return $rules;
-    }
-
-    /**
-    * Returns the 5 most recently added bands to database
-    */
-    public function findRecent(Query $query)
-    {
-        $bands = $this->find()->contain('Cities')
-        ->select(['Bands.name','Bands.formed','Bands.created', 'Cities.name'])
-        ->order(['Bands.created'=>'desc'])
-        ->limit(5);
-        return $bands;
-    }
-
-    /*
-     * Returns bands from a given genre
-     * to correct, $genre not working
-     */
-
-    public function findGenre(Query $query, array $options)
-    {
-        $bands = $this->find()->matching([
-                            'Cities' => function($q) use ($options){
-                                return $q->where(['Cities.name' => $options['genre']]);
-                            } 
-            ]);
-        return $bands;
     }
 }

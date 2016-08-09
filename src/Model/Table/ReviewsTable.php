@@ -7,19 +7,21 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * Singles Model
+ * Reviews Model
  *
- * @property \Cake\ORM\Association\BelongsTo $Bands
+ * @property \Cake\ORM\Association\BelongsTo $Albums
  *
- * @method \App\Model\Entity\Single get($primaryKey, $options = [])
- * @method \App\Model\Entity\Single newEntity($data = null, array $options = [])
- * @method \App\Model\Entity\Single[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Single|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Single patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\Single[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\Single findOrCreate($search, callable $callback = null)
+ * @method \App\Model\Entity\Review get($primaryKey, $options = [])
+ * @method \App\Model\Entity\Review newEntity($data = null, array $options = [])
+ * @method \App\Model\Entity\Review[] newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\Review|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\Review patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\Review[] patchEntities($entities, array $data, array $options = [])
+ * @method \App\Model\Entity\Review findOrCreate($search, callable $callback = null)
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
-class SinglesTable extends Table
+class ReviewsTable extends Table
 {
 
     /**
@@ -32,12 +34,14 @@ class SinglesTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('singles');
-        $this->displayField('name');
+        $this->table('reviews');
+        $this->displayField('id');
         $this->primaryKey('id');
 
-        $this->belongsTo('Bands', [
-            'foreignKey' => 'band_id'
+        $this->addBehavior('Timestamp');
+
+        $this->belongsTo('Albums', [
+            'foreignKey' => 'album_id'
         ]);
     }
 
@@ -54,10 +58,7 @@ class SinglesTable extends Table
             ->allowEmpty('id', 'create');
 
         $validator
-            ->allowEmpty('name');
-
-        $validator
-            ->allowEmpty('link');
+            ->allowEmpty('description');
 
         return $validator;
     }
@@ -71,7 +72,7 @@ class SinglesTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['band_id'], 'Bands'));
+        $rules->add($rules->existsIn(['album_id'], 'Albums'));
 
         return $rules;
     }

@@ -1,22 +1,22 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\BandsTable;
+use App\Model\Table\ArtistsBandsTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\BandsTable Test Case
+ * App\Model\Table\ArtistsBandsTable Test Case
  */
-class BandsTableTest extends TestCase
+class ArtistsBandsTableTest extends TestCase
 {
 
     /**
      * Test subject
      *
-     * @var \App\Model\Table\BandsTable
+     * @var \App\Model\Table\ArtistsBandsTable
      */
-    public $Bands;
+    public $ArtistsBands;
 
     /**
      * Fixtures
@@ -24,12 +24,13 @@ class BandsTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
+        'app.artists_bands',
+        'app.artists',
         'app.bands',
         'app.cities',
         'app.countries',
         'app.albums',
         'app.songs',
-        'app.artists',
         'app.networks',
         'app.singles',
         'app.genres',
@@ -44,8 +45,8 @@ class BandsTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::exists('Bands') ? [] : ['className' => 'App\Model\Table\BandsTable'];
-        $this->Bands = TableRegistry::get('Bands', $config);
+        $config = TableRegistry::exists('ArtistsBands') ? [] : ['className' => 'App\Model\Table\ArtistsBandsTable'];
+        $this->ArtistsBands = TableRegistry::get('ArtistsBands', $config);
     }
 
     /**
@@ -55,7 +56,7 @@ class BandsTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->Bands);
+        unset($this->ArtistsBands);
 
         parent::tearDown();
     }
@@ -86,26 +87,6 @@ class BandsTableTest extends TestCase
      * @return void
      */
     public function testBuildRules()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test findRecent method
-     *
-     * @return void
-     */
-    public function testFindRecent()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test findGenre method
-     *
-     * @return void
-     */
-    public function testFindGenre()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

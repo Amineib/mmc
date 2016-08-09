@@ -10,7 +10,7 @@ use Cake\Validation\Validator;
  * Albums Model
  *
  * @property \Cake\ORM\Association\BelongsTo $Bands
- * @property \Cake\ORM\Association\HasMany $Songs
+ * @property \Cake\ORM\Association\HasMany $Reviews
  *
  * @method \App\Model\Entity\Album get($primaryKey, $options = [])
  * @method \App\Model\Entity\Album newEntity($data = null, array $options = [])
@@ -44,7 +44,7 @@ class AlbumsTable extends Table
         $this->belongsTo('Bands', [
             'foreignKey' => 'band_id'
         ]);
-        $this->hasMany('Songs', [
+        $this->hasMany('Reviews', [
             'foreignKey' => 'album_id'
         ]);
     }
@@ -66,6 +66,9 @@ class AlbumsTable extends Table
 
         $validator
             ->allowEmpty('link');
+
+        $validator
+            ->allowEmpty('picture');
 
         return $validator;
     }

@@ -4,20 +4,17 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Album Entity
+ * Review Entity
  *
  * @property int $id
- * @property string $name
- * @property string $link
- * @property int $band_id
- * @property string $created
- * @property string $modified
- * @property string $picture
+ * @property int $album_id
+ * @property string $description
+ * @property \Cake\I18n\Time $created
+ * @property \Cake\I18n\Time $modified
  *
- * @property \App\Model\Entity\Band $band
- * @property \App\Model\Entity\Song[] $songs
+ * @property \App\Model\Entity\Album $album
  */
-class Album extends Entity
+class Review extends Entity
 {
 
     /**
