@@ -15,7 +15,6 @@ class CountriesController extends AppController
         ->leftJoinWith('Cities')->group(['Countries.id'])->all();
         debug($countries);die('end');
     }
-   
 }
 
 

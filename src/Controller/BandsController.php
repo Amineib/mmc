@@ -40,6 +40,8 @@ class BandsController extends AppController
 
     $this->set(compact('$bands'));
   }
+
+  
    /*
     * View action: view details of an article for a given id
     */
@@ -68,6 +70,31 @@ class BandsController extends AppController
     */
 
    public function delete($id){
+   }
 
+
+   /*
+      Multi criteria search
+      @param city, city, genre or name using post method
+      @return Query object
+   */
+   public function search(){
+      //protoype of the query
+      $bands = $this->Bands->find()->matching(
+                            'Cities' , function($q){
+                                return $q->where(['Cities.name' => 'Ruthin']);
+                              })
+
+                            ->
+                            matching(
+                            'Genres' , function($q){
+                                return $q->where(['Genres.name' => 'Heavy']);
+                              })
+                            ->where(['Bands.name'=>"Warfarin Sodium"])
+                            ->all();
+      debug($bands); die();
+
+
+      return $bands;
    }
 }
