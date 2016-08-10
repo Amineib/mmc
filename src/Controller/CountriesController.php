@@ -14,7 +14,7 @@ class CountriesController extends AppController
         $countries = $this->Countries->find()->select(['nbr_cities'=>$this->Countries->find()->func()->count('Cities.id')])
         ->leftJoinWith('Cities')->group(['Countries.id'])->all();
         debug($countries);die('end');
-    }
+    }	
 }
 
 

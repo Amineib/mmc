@@ -15,7 +15,7 @@ use Cake\ORM\Entity;
  * @property string $picture
  *
  * @property \App\Model\Entity\Band $band
- * @property \App\Model\Entity\Song[] $songs
+ * @property \App\Model\Entity\Review[] $reviews
  */
 class Album extends Entity
 {

@@ -11,6 +11,7 @@ use Cake\Validation\Validator;
  *
  * @property \Cake\ORM\Association\BelongsTo $Bands
  * @property \Cake\ORM\Association\HasMany $Reviews
+ * @property \Cake\ORM\Association\HasMany $Songs
  *
  * @method \App\Model\Entity\Album get($primaryKey, $options = [])
  * @method \App\Model\Entity\Album newEntity($data = null, array $options = [])
@@ -46,6 +47,10 @@ class AlbumsTable extends Table
         ]);
         $this->hasMany('Reviews', [
             'foreignKey' => 'album_id'
+        ]);
+        $this->hasMany('Songs', [
+            'foreignKey' => 'album_id',
+            'dependent' => true
         ]);
     }
 

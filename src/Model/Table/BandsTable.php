@@ -48,10 +48,13 @@ class BandsTable extends Table
             'foreignKey' => 'city_id'
         ]);
         $this->hasMany('Albums', [
-            'foreignKey' => 'band_id'
+            'foreignKey' => 'band_id',
+            'dependent' => true,
+            'cascadeCallbacks' => true
         ]);
         $this->hasMany('Networks', [
-            'foreignKey' => 'band_id'
+            'foreignKey' => 'band_id',
+            'dependent' => true
         ]);
         $this->belongsToMany('Artists', [
             'foreignKey' => 'band_id',

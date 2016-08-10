@@ -54,7 +54,7 @@ class SongsTable extends Table
             ->allowEmpty('id', 'create');
 
         $validator
-            ->allowEmpty('name');
+            ->allowEmpty('title');
 
         return $validator;
     }

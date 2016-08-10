@@ -45,10 +45,24 @@ class BandsController extends AppController
    /*
     * View action: view details of an article for a given id
     */
-   public function view($id = null){
-            //code..
-            $band = $this->Bands->get($id,['contain'=>['Cities.Countries','Artists','Networks']]);
-            $this->set(compact('band'));
+   public function view(){
+              if( isset($this->request->query['id']) ) {
+                $band = $this->Bands->find()->contain(['Genres','Albums','Networks','Cities'])
+                        ->where(['Bands.id'=>$this->request->query['id']])
+                        ->first();
+                if(empty($band)){
+                      die('not found');
+                      //handle not found exception
+                } 
+                else{
+                  $this->set(compact('band'));
+                }               
+               
+              }
+              else{
+                //no params found, handle error
+                $this->redirect(['action'=>'index']);
+              }
    }
    /*
     * Add action : add a new band  
@@ -70,30 +84,46 @@ class BandsController extends AppController
     */
 
    public function delete($id){
+      $band = $this->Bands->get($id);
+      $res = $this->Bands->delete($band);
+      debug($res); die();
    }
 
 
    /*
-      Multi criteria search
-      @param city, city, genre or name using post method
+      Multi criteria search for a bands
+      @param city, genre or band calling post method
       @return Query object
    */
    public function search(){
-      //protoype of the query
-      $bands = $this->Bands->find()->matching(
+      //action should be called using Post method only
+      //to add Get method logic eventually
+      if($this->request->is('get'))
+      {
+          $bands = $this->Bands->find();
+
+          if($this->request->data('city')){
+            $bands = $bands->matching(
                             'Cities' , function($q){
-                                return $q->where(['Cities.name' => 'Ruthin']);
-                              })
+                                return $q->where(['Cities.name' => $this->request->data('city')]);
+                              });
+          }
 
-                            ->
-                            matching(
+          if($this->request->data('genre')){
+            $bands = $bands->matching(
                             'Genres' , function($q){
-                                return $q->where(['Genres.name' => 'Heavy']);
-                              })
-                            ->where(['Bands.name'=>"Warfarin Sodium"])
-                            ->all();
-      debug($bands); die();
+                                return $q->where(['Cities.name' => $this->request->data('genre')]);
+                              });
+          }
 
+          if($this->request->data('band')){
+            $bands = $bands->where(['Bands.name'=>$this->request->data('band')]);
+          }
+      }
+      else
+      {
+        return $this->redirect(['controller'=>'posts', 'action'=>'index']);
+      }
 
       return $bands;
    }

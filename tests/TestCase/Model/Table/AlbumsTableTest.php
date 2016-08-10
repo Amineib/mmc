@@ -28,12 +28,12 @@ class AlbumsTableTest extends TestCase
         'app.bands',
         'app.cities',
         'app.countries',
-        'app.artists',
         'app.networks',
-        'app.singles',
+        'app.artists',
+        'app.artists_bands',
         'app.genres',
         'app.bands_genres',
-        'app.songs'
+        'app.reviews'
     ];
 
     /**

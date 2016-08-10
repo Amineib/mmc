@@ -7,8 +7,8 @@ use Cake\ORM\Entity;
  * Song Entity
  *
  * @property int $id
- * @property string $name
  * @property int $album_id
+ * @property string $title
  *
  * @property \App\Model\Entity\Album $album
  */
