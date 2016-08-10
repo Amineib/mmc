@@ -11,6 +11,14 @@ use App\Controller\AppController;
 class BandsController extends AppController
 {
 
+    public function initialize()
+    {
+        parent::initialize();
+
+        $this->loadComponent('Flash'); // Include the FlashComponent
+    }
+
+
    /* 
     * Index page for bands controller, shows latest bands added, and relative informations
     * about them
@@ -52,7 +60,6 @@ class BandsController extends AppController
                         ->first();
                 if(empty($band)){
                       die('not found');
-                      //handle not found exception
                 } 
                 else{
                   $this->set(compact('band'));
@@ -68,7 +75,67 @@ class BandsController extends AppController
     * Add action : add a new band  
     */
    public function add(){
-            //code..
+        
+         // We assume data type is like this:
+          $data = [
+                      'name' => 'lastBand',
+                      'active' => '1',
+                      'formed' => '2011',
+                      'description' => 'lorem ipsum..',
+                      'artists' => [
+                          [
+                            'name' => 'MehdiJardani', //we create a new record {artist}
+                            'description' => 'lorem ipsum..',
+                            '_joinData' => [
+                                'instrument' => 'vocals',
+                                'joined' => '2011'
+                            ]
+                          ],
+                          [
+                            'id' => 14, //existing record
+                            '_joinData' => [
+                                  'instrument' => 'bass',
+                                  'joined' => '2011'
+                              ]
+                          ]
+                      ],
+                      'city' => [
+                          'id' => 17
+                      ]
+                  ];
+        
+
+              $band = $this->Bands->newEntity($data, [
+                        'associated' => ['Artists._joinData','Cities._joinData']
+              ]);
+              /* test save
+              if($this->Bands->save($band)){
+
+                die ('ok');
+              }
+              else{
+                debug($band);
+                die('ko');
+              }
+              */
+
+
+        if ($this->request->is('post')) {
+            $band = $this->Bands->newEntity($data, [
+                        'associated' => ['Artists._joinData']
+              ]);
+            if ($this->Articles->save($article)) {
+                //band was saved, now we need to save associated artists
+
+                $this->Flash->success(__('The band has been saved.'));
+                
+
+
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('Unable to add the band.'));
+        }
+        $this->set('band', $band);
    }
 
    /*
@@ -77,16 +144,32 @@ class BandsController extends AppController
 
    public function update($id){
             //code
+
    }
 
    /*
     * Delete action: to delete a band
+      @param : id of the band
+      redirects to the refered page in case of success
     */
 
    public function delete($id){
-      $band = $this->Bands->get($id);
-      $res = $this->Bands->delete($band);
-      debug($res); die();
+      //to be reimplemented in ajax.
+      $band = $this->Bands->find()->where(['Bands.id'=>$id])->first();
+      if(!empty($band) && $this->Bands->delete($band)){
+                $this->Flash->set('Band deleted successfully.', [
+            'element' => 'success'
+        ]);
+                die('not empty');
+                //$this->redirect($this->refer());
+      }
+      else{
+              $this->Flash->set('There was an unexpected error..', [
+                'element' => 'error'
+            ]);
+              die('empty');
+                //$this->redirect($this->refer());
+      }
    }
 
 
