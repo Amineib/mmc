@@ -23,20 +23,9 @@ class BandsController extends AppController
     * Index page for bands controller, shows latest bands added, and relative informations
     * about them
     */
-   public function index($genre){
-        
-        //$bands = $this->Bands->find('genre',['genre'=>'Black'])->all();
-       // debug($bands); die();
-
-        
-
-        die();
-
-        /* to uncomment after tests
-        $recent = $this->Bands->find('recent')->all();
-        debug($recent);die('end');
-        $this->set(compact('recent'));
-        */
+   public function index(){
+        $bands = $this->Bands->find()->all();
+        $this->set(compact('$bands'));
    }
 
   /* viewGenre: view bands by genres
@@ -105,9 +94,7 @@ class BandsController extends AppController
                   ];
         
 
-              $band = $this->Bands->newEntity($data, [
-                        'associated' => ['Artists._joinData','Cities._joinData']
-              ]);
+              
               /* test save
               if($this->Bands->save($band)){
 
@@ -122,15 +109,10 @@ class BandsController extends AppController
 
         if ($this->request->is('post')) {
             $band = $this->Bands->newEntity($data, [
-                        'associated' => ['Artists._joinData']
+                        'associated' => ['Artists._joinData','Cities._joinData']
               ]);
-            if ($this->Articles->save($article)) {
-                //band was saved, now we need to save associated artists
-
+            if ($this->Articles->save($band)) {
                 $this->Flash->success(__('The band has been saved.'));
-                
-
-
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('Unable to add the band.'));
@@ -142,9 +124,18 @@ class BandsController extends AppController
     * Update action : update a band
     */
 
-   public function update($id){
-            //code
-
+   public function edit($id = null)
+   {
+              $band = $this->Bands->find()->where(['id'=>$id]);
+              if ($this->request->is(['post', 'put'])) {
+                  $this->Bands->patchEntity($band, $this->request->data);
+                  if ($this->Bands->save($band)) {
+                      $this->Flash->success(__('the band has been updated.'));
+                      return $this->redirect(['action' => 'index']);
+                  }
+                  $this->Flash->error(__('Unable to update the band.'));
+              }
+              $this->set('band', $band);
    }
 
    /*
@@ -207,7 +198,6 @@ class BandsController extends AppController
       {
         return $this->redirect(['controller'=>'posts', 'action'=>'index']);
       }
-
       return $bands;
    }
 }
