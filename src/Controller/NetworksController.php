@@ -104,14 +104,22 @@ class NetworksController extends AppController
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
-        $network = $this->Networks->get($id);
-        if ($this->Networks->delete($network)) {
-            $this->Flash->success(__('The network has been deleted.'));
-        } else {
-            $this->Flash->error(__('The network could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
+        //to be reimplemented in ajax.
+      $network = $this->Networks->find()->where(['Networks.id'=>$id])->first();
+      if(!empty($network) && $this->Networks->delete($network))
+      {
+                $this->Flash->set('network deleted successfully.', [
+            'element' => 'success'
+        ]);
+                die('not empty');
+                //$this->redirect($this->refer());
+      }
+      else
+      {
+              $this->Flash->set('There was an unexpected error..', [
+                'element' => 'error'
+            ]);
+              die('empty');
+      }
     }
 }
