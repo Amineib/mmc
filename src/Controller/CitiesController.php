@@ -41,15 +41,64 @@ class CitiesController extends AppController
         $this->set('city', $city);
     }
 
-    public function add(){
+    public function add()
+    {
+        $data = [
+            'name' => 'Salamika',
+            'country' => [
+                    'id' => 48
+            ]
+        ];
 
+        $city = $this->Cities->newEntity($data, [
+                        'associated' => ['Countries' => [
+                                             'accessibleFields' => ['id' => true]
+                        ]]
+                ]);
+        //debug($this->Cities->save($city)); die('end add');
+                if($this->request->is('post')){
+                   if($this->Cities->save($city)){
+                         $this->Flash->success(__('The city has been saved.'));
+                          return $this->redirect(['action' => 'index']);
+                    }
+                    else{
+                        $this->Flash->success(__('There was an error while saving the city..'));
+                        return $this->redirect(['action' => 'index']);
+                    }
+                } 
     }   
 
     public function edit(){
-        
+            $city = $this->Cities->find()->where(['Cities.id' => $id])->first();
+            if (!empty($city) && $this->request->is(['patch', 'post', 'put'])) {
+                $city = $this->Cities->patchEntity($city, $this->request->data);
+                if ($this->Cities->save($city)) {
+                    $this->Flash->success(__('The city has been saved.'));
+                    return $this->redirect(['action' => 'index']);
+                } else {
+                    $this->Flash->error(__('The city could not be saved. Please, try again.'));
+                }
+            }
+            $this->set(compact('city'));
     }
 
     public function delete(){
-
+       $city = $this->Cities->find()->where(['Cities.id'=>$id])->first();
+      if(!empty($city) && $this->Cities->delete($city))
+      {
+                $this->Flash->set('City deleted successfully.', [
+            'element' => 'success'
+        ]);
+                die('not empty');
+                //$this->redirect($this->refer());
+      }
+      else
+      {
+              $this->Flash->set('There was an unexpected error..', [
+                'element' => 'error'
+            ]);
+              die('empty');
+              //$this->redirect($this->refer());
+      }
     } 
 }

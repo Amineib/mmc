@@ -57,13 +57,15 @@ class CountriesController extends AppController
               $country = $this->Countries->newEntity($data, [
                         'associated' => ['Cities']
                 ]);
-                if($this->request->is('post')){
+              
+                if($this->request->is('post'))
+                {
                    if($this->Countries->save($country)){
                          $this->Flash->success(__('The country has been saved.'));
                           return $this->redirect(['action' => 'index']);
                     }
                     else{
-                        $this->Flash->success(__('There was an error while saving the band..'));
+                        $this->Flash->success(__('There was an error while saving the country..'));
                         return $this->redirect(['action' => 'index']);
                     }
                 } 
