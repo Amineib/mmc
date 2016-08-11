@@ -19,13 +19,13 @@ class CitiesController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['Countries']
-        ];
-        $cities = $this->paginate($this->Cities);
+            $this->paginate = [
+                'contain' => ['Countries']
+            ];
+            $cities = $this->paginate($this->Cities);
 
-        $this->set(compact('cities'));
-        $this->set('_serialize', ['cities']);
+            $this->set(compact('cities'));
+            $this->set('_serialize', ['cities']);
     }
 
     /**
@@ -37,30 +37,19 @@ class CitiesController extends AppController
      */
     public function view($id = null)
     {
-        $city = $this->Cities->get($id, [
-            'contain' => ['Countries', 'Bands']
-        ]);
-
+        $city = $this->Cities->find()->where(['Cities.id' => $id])->all();
         $this->set('city', $city);
-        $this->set('_serialize', ['city']);
     }
 
-    /**
-     * Add method
-     *
-     * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
-     */
-    
-    public function country($id){
-      $countries = $this->Cities->find()->leftJoinwith('Countries')->where(['Countries.id'=>0]);
-      debug($countries->count());
-      $countries = $countries->all();
-      foreach ($countries as $c) {
-          # code...
-            debug($c);
-      }
+    public function add(){
 
-      
-      die('end');
+    }   
+
+    public function edit(){
+        
     }
+
+    public function delete(){
+
+    } 
 }

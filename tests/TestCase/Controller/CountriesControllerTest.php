@@ -20,10 +20,11 @@ class CountriesControllerTest extends IntegrationTestCase
         'app.cities',
         'app.bands',
         'app.albums',
+        'app.reviews',
         'app.songs',
-        'app.artists',
         'app.networks',
-        'app.singles',
+        'app.artists',
+        'app.artists_bands',
         'app.genres',
         'app.bands_genres'
     ];

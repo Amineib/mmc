@@ -37,7 +37,8 @@ class CountriesTable extends Table
         $this->primaryKey('id');
 
         $this->hasMany('Cities', [
-            'foreignKey' => 'country_id'
+            'foreignKey' => 'country_id',
+            'dependent' =>true
         ]);
     }
 

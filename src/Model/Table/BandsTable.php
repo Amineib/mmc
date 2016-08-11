@@ -113,13 +113,16 @@ class BandsTable extends Table
         return $rules;
     }
 
+    /*
+        custom find method to find bands by genres
+    */
     public function findGenre(Query $query, array $options)
     {
-        $bands = $this->find()->matching([
-                            'Cities' => function($q) use ($options){
-                                return $q->where(['Cities.name' => $options['genre']]);
+        $bands = $this->find()->matching(
+                            'Genres' , function($q) use ($options){
+                                return $q->where(['Genres.name' => $options['genre']]);
                             } 
-            ]);
+            );
         return $bands;
     }
 }

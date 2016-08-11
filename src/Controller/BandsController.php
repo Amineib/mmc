@@ -11,17 +11,9 @@ use App\Controller\AppController;
 class BandsController extends AppController
 {
 
-    public function initialize()
-    {
-        parent::initialize();
-
-        $this->loadComponent('Flash'); // Include the FlashComponent
-    }
-
 
    /* 
-    * Index page for bands controller, shows latest bands added, and relative informations
-    * about them
+    * Index action: shows all the bands available.
     */
    public function index(){
         $bands = $this->Bands->find()->all();
@@ -31,16 +23,15 @@ class BandsController extends AppController
   /* viewGenre: view bands by genres
    */
   public function viewGenre($genre){
-    $bands = $this->Bands->find()->contain('Genres', function($q) use ($genre){
-        return $q->where(['Genres.name'=>$genre])->all();
-    });
-
+    $options['genre'] = $genre;
+    $bands = $this->Bands->find('genre',$options);
     $this->set(compact('$bands'));
   }
 
   
    /*
     * View action: view details of an article for a given id
+      Called method : get
     */
    public function view(){
               if( isset($this->request->query['id']) ) {
@@ -67,13 +58,13 @@ class BandsController extends AppController
         
          // We assume data type is like this:
           $data = [
-                      'name' => 'lastBand',
-                      'active' => '1',
-                      'formed' => '2011',
+                      'name' => 'Thrillogy',
+                      'active' => '0',
+                      'formed' => '2013',
                       'description' => 'lorem ipsum..',
                       'artists' => [
                           [
-                            'name' => 'MehdiJardani', //we create a new record {artist}
+                            'name' => 'Wassim Ahenjir', //we create a new record {artist}
                             'description' => 'lorem ipsum..',
                             '_joinData' => [
                                 'instrument' => 'vocals',
@@ -81,35 +72,39 @@ class BandsController extends AppController
                             ]
                           ],
                           [
-                            'id' => 14, //existing record
+                            'name' => 'Smail TP', //existing record
                             '_joinData' => [
-                                  'instrument' => 'bass',
+                                  'instrument' => 'Guitars',
                                   'joined' => '2011'
                               ]
                           ]
                       ],
                       'city' => [
-                          'id' => 17
+                          'id' => 30
+                      ],
+                      'networks' => [
+                          [
+                          'type' => 'facebook',
+                          'link' => ''
+                          ],
+                          [
+                          'type' => 'twitter',
+                          'link' => ''
+                          ]
+                      ],
+                      'genres' => [ //problem with multiple record, to check later
+                        [
+                          'id' => 12; 
+                        ]
                       ]
                   ];
-        
-
-              
-              /* test save
-              if($this->Bands->save($band)){
-
-                die ('ok');
-              }
-              else{
-                debug($band);
-                die('ko');
-              }
-              */
-
-
+                   $band = $this->Bands->newEntity($data, [
+                        'associated' => ['Artists._joinData','Cities','Networks','Genres']
+              ]);
+                   debug($this->Bands->save($band)); die('ok');
         if ($this->request->is('post')) {
             $band = $this->Bands->newEntity($data, [
-                        'associated' => ['Artists._joinData','Cities._joinData']
+                        'associated' => ['Artists._joinData','Cities','Networks','Genres']
               ]);
             if ($this->Articles->save($band)) {
                 $this->Flash->success(__('The band has been saved.'));
@@ -126,7 +121,8 @@ class BandsController extends AppController
 
    public function edit($id = null)
    {
-              $band = $this->Bands->find()->where(['id'=>$id]);
+        //assuming we update only basic band info
+              $band = $this->Bands->find()->where(['id'=>$id])->first();
               if ($this->request->is(['post', 'put'])) {
                   $this->Bands->patchEntity($band, $this->request->data);
                   if ($this->Bands->save($band)) {
@@ -147,14 +143,16 @@ class BandsController extends AppController
    public function delete($id){
       //to be reimplemented in ajax.
       $band = $this->Bands->find()->where(['Bands.id'=>$id])->first();
-      if(!empty($band) && $this->Bands->delete($band)){
+      if(!empty($band) && $this->Bands->delete($band))
+      {
                 $this->Flash->set('Band deleted successfully.', [
             'element' => 'success'
         ]);
                 die('not empty');
                 //$this->redirect($this->refer());
       }
-      else{
+      else
+      {
               $this->Flash->set('There was an unexpected error..', [
                 'element' => 'error'
             ]);
