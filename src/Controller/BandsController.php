@@ -10,8 +10,6 @@ use App\Controller\AppController;
  */
 class BandsController extends AppController
 {
-
-
    /* 
     * Index action: shows all the bands available.
     */
@@ -106,7 +104,7 @@ class BandsController extends AppController
             $band = $this->Bands->newEntity($data, [
                         'associated' => ['Artists._joinData','Cities','Networks','Genres']
               ]);
-            if ($this->Articles->save($band)) {
+            if ($this->Bands->save($band)) {
                 $this->Flash->success(__('The band has been saved.'));
                 return $this->redirect(['action' => 'index']);
             }
@@ -131,6 +129,7 @@ class BandsController extends AppController
                   }
                   $this->Flash->error(__('Unable to update the band.'));
               }
+
               $this->set('band', $band);
    }
 
@@ -197,5 +196,20 @@ class BandsController extends AppController
         return $this->redirect(['controller'=>'posts', 'action'=>'index']);
       }
       return $bands;
+   }
+
+   //delete the relation between a given band, and an artist
+   public function unlinkArtist($band, $artistid){
+        $band = $this->Bands->find()->where(['Bands.id' => $band])->first();
+        $artist = $this->Bands->Artists->find()->where(['Artists.id' => $artistid])->toArray();
+        $this->Bands->Artists->unlink($band,$artist);
+        die();
+   }
+
+   public function unlinkGenre($band, $genreid){
+        $band = $this->Bands->find()->where(['Bands.id' => $band])->first();
+        $genre = $this->Bands->Genres->find()->where(['Genres.id' => $genreid])->toArray();
+        $this->Bands->Genres->unlink($band,$genre);
+        die();
    }
 }

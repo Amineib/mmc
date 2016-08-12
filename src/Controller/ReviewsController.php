@@ -4,11 +4,11 @@ namespace App\Controller;
 use App\Controller\AppController;
 
 /**
- * Networks Controller
+ * Reviews Controller
  *
- * @property \App\Model\Table\NetworksTable $Networks
+ * @property \App\Model\Table\ReviewsTable $Reviews
  */
-class NetworksController extends AppController
+class ReviewsController extends AppController
 {
 
     /**
@@ -18,21 +18,21 @@ class NetworksController extends AppController
      */
     public function index()
     {
-        $networks = $this->Networks->find()->order(['Networks.name' => 'asc'])->all();
-        $this->set(compact('networks'));
+        $reviews = $this->Reviews->find()->order(['Reviews.created' => 'desc'])->all();
+        $this->set(compact('reviews'));
     }
 
     /**
      * View method
      *
-     * @param string|null $id Network id.
+     * @param string|null $id Review id.
      * @return \Cake\Network\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($id = null)
     {
-        $city = $this->Cities->find()->where(['Cities.id' => $id])->all();
-        $this->set('city', $city);
+        $reviews = $this->Reviews->find()->where(['Reviews.id' => $id])->all();
+        $this->set('reviews', $reviews);
     }
 
     /**
@@ -43,26 +43,25 @@ class NetworksController extends AppController
     public function add()
     {
         $data = [
-            'type' => 'facebook',
-            'link' => 'some link',
-            'band' => [
-                    'id' => 136
+            'description' => 'Lorem ipsum..',
+            'album' => [
+                    'id' => 1
             ]
         ];
 
-        $network = $this->Networks->newEntity($data, [
-                        'associated' => ['Bands' => [
+        $review = $this->Reviews->newEntity($data, [
+                        'associated' => ['Albums' => [
                                              'accessibleFields' => ['id' => true]
                         ]]
                 ]);
-        debug($this->Networks->save($network)); die('end add');
+        debug($this->Reviews->save($review)); die('end add');
                 if($this->request->is('post')){
-                   if($this->Networks->save($network)){
-                         $this->Flash->success(__('The network has been saved.'));
+                   if($this->Reviews->save($review)){
+                         $this->Flash->success(__('The review has been saved.'));
                           return $this->redirect(['action' => 'index']);
                     }
                     else{
-                        $this->Flash->success(__('There was an error while saving the network..'));
+                        $this->Flash->success(__('There was an error while saving the review..'));
                         return $this->redirect(['action' => 'index']);
                     }
                 } 
@@ -71,39 +70,39 @@ class NetworksController extends AppController
     /**
      * Edit method
      *
-     * @param string|null $id Network id.
+     * @param string|null $id Review id.
      * @return \Cake\Network\Response|void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
     public function edit($id = null)
     {
-        $network = $this->Networks->find()->where(['Networks.id' => $id])->first();
-            if (!empty($network) && $this->request->is(['patch', 'post', 'put'])) {
-                $network = $this->Networks->patchEntity($network, $this->request->data);
+        $review = $this->Reviews->find()->where(['Reviews.id' => $id])->first();
+            if (!empty($review) && $this->request->is(['patch', 'post', 'put'])) {
+                $review = $this->Reviews->patchEntity($review, $this->request->data);
                 if ($this->Networks->save($network)) {
-                    $this->Flash->success(__('The network has been saved.'));
+                    $this->Flash->success(__('The review has been saved.'));
                     return $this->redirect(['action' => 'index']);
                 } else {
-                    $this->Flash->error(__('The network could not be saved. Please, try again.'));
+                    $this->Flash->error(__('The review could not be saved. Please, try again.'));
                 }
             }
-            $this->set(compact('network'));
+            $this->set(compact('review'));
     }
 
     /**
      * Delete method
      *
-     * @param string|null $id Network id.
+     * @param string|null $id Review id.
      * @return \Cake\Network\Response|null Redirects to index.
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function delete($id = null)
     {
         //to be reimplemented in ajax.
-      $network = $this->Networks->find()->where(['Networks.id'=>$id])->first();
-      if(!empty($network) && $this->Networks->delete($network))
+      $review = $this->Reviews->find()->where(['Reviews.id'=>$id])->first();
+      if(!empty($review) && $this->Reviews->delete($review))
       {
-                $this->Flash->set('network deleted successfully.', [
+                $this->Flash->set('Reviey deleted successfully.', [
             'element' => 'success'
         ]);
                 die('not empty');
@@ -115,6 +114,7 @@ class NetworksController extends AppController
                 'element' => 'error'
             ]);
               die('empty');
+                //$this->redirect($this->refer());
       }
     }
 }
